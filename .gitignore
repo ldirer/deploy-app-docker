@@ -1,0 +1,9 @@
+*.swp
+
+# Cuz my drafts may contain bad language.
+deploy_app_docker.md
+
+__pycache__/
+
+# jetbrains IDE
+.idea/
