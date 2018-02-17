@@ -1,5 +1,15 @@
 version: '3'
 services:
+    front:
+      image: docker-tutorial/front
+      build:
+        context: ./
+        dockerfile: front.dockerfile
+      command: npm run dev
+      volumes:
+        - ./client:/app
+      ports:
+        - "8080:8080"
     web:
       image: docker-tutorial/web
       build:

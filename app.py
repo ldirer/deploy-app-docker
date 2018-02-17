@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 
-@app.route('/')
+@app.route('/api')
 def hello_docker():
     return 'Now this really runs from docker!'
 
