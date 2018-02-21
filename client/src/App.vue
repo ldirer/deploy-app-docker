@@ -1,28 +1,50 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+
+  <div class="section">
+    <div class="container" style="text-align: center">
+        <img src="./assets/vue.png">
+        <img src="./assets/flask.png">
+        <img src="./assets/docker.png">
+
+
+
+      <game-over v-if="game.isOver" :nQuestions="game.nQuestionsInQuiz" :score="game.score"/>
+
+      <div v-else>
+      <span v-if="game.currentQuestionIndex !== 0">
+        Current score: {{ game.score }} /
+        {{ game.currentQuestionIndex + (game.currentQuestion.userAnswer === undefined ? 0 : 1)}}
+      </span>
+
+        <quiz-question :question="game.currentQuestion"/>
+
+      </div>
+
+
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import QuizQuestion from './components/QuizQuestion'
+import GameOver from './components/GameOver'
+import { store } from './store'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    QuizQuestion,
+    GameOver
+  },
+  data: function() {
+    return { game: store }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  img {
+    width: 48px;
+    height: 48px;
+  }
 </style>
