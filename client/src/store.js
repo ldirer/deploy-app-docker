@@ -1,9 +1,24 @@
 import {
   ACTION_GET_QUESTIONS, ACTION_GET_QUESTIONS_FAILURE,
   ACTION_GET_QUESTIONS_START, ACTION_GET_QUESTIONS_SUCCESS, ACTION_GO_TO_NEXT_QUESTION, ACTION_START_NEW_GAME,
-  ACTION_SUBMIT_ANSWER
+  ACTION_SUBMIT_ANSWER, ACTION_SUBMIT_SCORE, ACTION_SUBMIT_SCORE_FAILURE, ACTION_SUBMIT_SCORE_SUCCESS
 } from "./actions";
 
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+class Question {
+
+  constructor(questionData) {
+    // We want to initialize the fields that are not typically in our api response.
+    this.userAnswer = undefined;
+    Object.assign(this, questionData)
+  }
+
+  /** This function will return false for unanswered questions. */
+  get isCorrect() {
+    return this.answer === this.userAnswer;
+  }
+}
 
 const sampleQuestionText = `
 What is the output of the following code?
@@ -21,11 +36,12 @@ class MyClass(object):
 print(MyClass().get_string())
 \`\`\``
 
+const N_QUESTIONS_IN_QUIZ = 3
 
 export const store = {
   // Note I am not really allowing going back through answers atm.
   currentQuestionIndex: 0,
-  nQuestionsInQuiz: 3,
+  nQuestionsInQuiz: N_QUESTIONS_IN_QUIZ,
 
   get currentQuestion() {
     console.log('in currentQuestion')
@@ -42,27 +58,16 @@ export const store = {
     return this.questions.map(q => q.answer === q.userAnswer).reduce((acc, v) => acc + v, 0)
   },
 
-  questions: range(0, 10).map(id => {
-      return {
-        id,
-        text: sampleQuestionText,
-        choices: ['Trick question?', 'NameError', 'What the ...?'],
-        answer: 'Trick question?',
-        userAnswer: undefined,
-        /** This function will return false for unanswered questions. */
-        get isCorrect() {
-          return this.answer === this.userAnswer;
-        }
-      }
-    }
-  ),
-
+  questions: getMockQuestions(N_QUESTIONS_IN_QUIZ).results,
   loading: {
     // Remember Vue change detection does now work with addition of new elements, so we need to init all the values.
-    // TODO: this should be automated. JUST ANOTHER PROGRAMMER TRAP.
+    // TODO: this should be automated. If we forget it since will break in a non-obvious way. ANOTHER PROGRAMMER TRAP.
     ACTION_GET_QUESTIONS: false,
+    ACTION_SUBMIT_SCORE: false,
   }
 }
+
+window.store = store
 
 /**
  * Wait on promise, and dispatch actions passed as arguments on success and on failure.
@@ -149,7 +154,8 @@ function gameReducer(action) {
   if (action.type === ACTION_GET_QUESTIONS_SUCCESS) {
     let { response } = action.payload
     store.loading[ACTION_GET_QUESTIONS] = false
-    store.questions = response.data.results
+    store.questions = response.results.map(questionData => new Question(questionData))
+    console.log('store', store)
   }
 
   if (action.type === ACTION_GET_QUESTIONS_FAILURE) {
@@ -157,26 +163,58 @@ function gameReducer(action) {
     store.loading[ACTION_GET_QUESTIONS] = false
   }
 
+
+  if (action.type === ACTION_SUBMIT_SCORE) {
+    let { userName } = action.payload
+    store.loading[ACTION_SUBMIT_SCORE] = true
+    store.userName = userName
+
+    registerActionCallbacks(postScore(), ACTION_SUBMIT_SCORE_SUCCESS, ACTION_SUBMIT_SCORE_FAILURE)
+  }
+
+  if (action.type === ACTION_SUBMIT_SCORE_SUCCESS) {
+    store.loading[ACTION_SUBMIT_SCORE] = false
+  }
+  if (action.type === ACTION_SUBMIT_SCORE_FAILURE) {
+    // TODO: error message notification
+    store.loading[ACTION_SUBMIT_SCORE] = false
+  }
+}
+
+
+function postScore() {
+  return fetch('/api/scores', {
+    body: JSON.stringify({
+      userName: store.userName,
+      // We might have fetched more questions than we used in the quiz.
+      questions: store.questions.slice(0, store.nQuestionsInQuiz)}),
+    headers: {
+      'content-type': 'application/json'
+    },
+    method:'post'
+  }).then(r => r.json())
 }
 
 async function getQuestions() {
+  return fetch('/api/questions').then(r => r.json()).then(json => {
+    console.log('json from api/questions', json)
+    return json
+  })
+}
+
+
+function getMockQuestions(n) {
   return {
-    data: {
-      results: range(0, 10).map(id => {
-          return {
+      results: range(0, n).map(id => {
+          return new Question({
             id,
             text: sampleQuestionText,
             choices: ['Trick question?', 'NameError', 'What the ...?'],
             answer: 'Trick question?',
             userAnswer: undefined,
-            /** This function will return false for unanswered questions. */
-            get isCorrect() {
-              return this.answer === this.userAnswer;
-            }
-          }
+          })
         }
       )
-    }
   }
 }
 
