@@ -11,3 +11,6 @@ __pycache__/
 
 # jetbrains IDE
 .idea/
+
+# Env variables that I dont want to publish
+.env
