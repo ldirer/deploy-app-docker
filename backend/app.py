@@ -19,16 +19,28 @@ def hello_docker():
     return 'Now this really runs from docker!'
 
 
-@app.route('/api/questions', methods=['GET'])
-def questions():
+@app.route('/api/new_game', methods=['GET'])
+def new_game():
+    # raise ValueError
+    # from time import sleep
+    # sleep(50)
+
+    # This is a bit weird. We create a game just to get an id.
+    # This makes sure that future requests from the client are bound to an id
+    # (and if we submit score twice we only create one log).
+    game = Game()
+    db.session.add(game)
+    db.session.commit()
+
     return jsonify({
-        'results': [q.to_json() for q in QuizQuestion.query.order_by(func.random()).limit(10)]
+        'id': game.id,
+        'questions': [q.to_json() for q in QuizQuestion.query.order_by(func.random()).limit(10)]
     })
 
 
 @app.route('/api/scores', methods=['POST'])
 def submit_score():
-    required_fields = ['questions', 'userName']
+    required_fields = ['gameId', 'questions', 'userName']
     data = request.json
 
     if not all(f in data for f in required_fields):
@@ -39,9 +51,10 @@ def submit_score():
         log = AnswerLog(question_id=question['id'], user_answer=question['userAnswer'])
         answer_logs.append(log)
 
-    game = Game()
+    game = Game.query.get(data['gameId'])
     game.user_name = data['userName']
     game.answer_logs = answer_logs
+    game.finished_datetime = datetime.utcnow()
 
     db.session.add(game)
 
@@ -52,9 +65,9 @@ def submit_score():
 
 @app.route('/api/scores', methods=['GET'])
 def latest_scores():
-    games = Game.query.order_by(Game.created_datetime.desc()).limit(10)
+    games = Game.query.filter(Game.user_name != '').order_by(Game.finished_datetime.desc()).limit(10)
     return jsonify({'results': [
-        game.to_json() for game in games
+        game.to_json() for game in games if game.answer_logs
     ]}), 200
 
 
@@ -66,7 +79,6 @@ class QuizQuestion(db.Model):
     answer = db.Column(db.Text())
 
     # A list of answers. Has to contain the actual answer!
-    # TODO: or in a separate table with correct answers? and 'correct', 'plausible', 'nonsense'? Next step mb.
     choices = db.Column(JSONB())
 
     # You know, throw stuff in there. `metadata` is a reserved sqlalchemy keyword so cant use that.
@@ -88,7 +100,7 @@ class Game(db.Model):
     user_name = db.Column(db.Text())
 
     # We should only store utc times.
-    created_datetime = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+    finished_datetime = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
 
     @property
     def score(self):
@@ -100,6 +112,7 @@ class Game(db.Model):
     def to_json(self):
         return {
             'id': self.id,
+            'datetime': self.finished_datetime,
             'userName': self.user_name,
             'score': {
                 'nCorrect': self.score[0],

@@ -1,0 +1,11 @@
+//https://bulma.io/documentation/overview/customize/
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/functions";
+
+// That's it, I did not actually customize it. It worked though.
+//$body-background-color: #3b3b3b;
+//$body-color: $white-ter;
+
+
+// 6. Import the rest of Bulma
+@import "~bulma";
