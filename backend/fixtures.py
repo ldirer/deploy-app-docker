@@ -224,6 +224,22 @@ Python 3.6.0
         }
     }
 
+    # Actually parsed as 'False == False and False in [False]'
+    sample_python_8 = {
+        'text': """
+```python3
+Python 3.6.0 
+>>> False == False in [False]
+?
+```
+""".strip(),
+        'choices': ['SyntaxError: invalid syntax', "True", "False"],
+        'answer': "True",
+        'data': {
+            'language': 'python',
+            'is_wat': True,
+        }
+    }
     sample_js_5 = {
         'text': """
 ```js
@@ -235,7 +251,7 @@ Python 3.6.0
 ```
 """.strip(),
         'choices': ['[1, 2, 3, [0, 5, 6]]', '[1, 2, 3, [4, 5, 6]]', '[1, 2, 3, 0]'],
-        'answer': "{'expected': True, 'wat': False}",
+        'answer': "[1, 2, 3, [0, 5, 6]]",
         'data': {
             'language': 'javascript',
             'is_wat': False,

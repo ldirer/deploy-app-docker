@@ -1,0 +1,4 @@
+.circleci
+client/node_modules
+.git/
+.idea/

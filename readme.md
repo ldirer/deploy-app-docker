@@ -31,3 +31,42 @@ I believe that understanding some weird behaviors of your favorite language can 
 Which does not mean that good programmers know them nor that you have to know them to be a good programmer.
 
 [This](https://www.youtube.com/watch?v=sH4XF6pKKmk) is a nice talk that explains some Python WATs that I included in the quiz, and more.
+
+
+## Deploying
+
+Requirements:
+
+* An aws/google cloud/digital ocean account with programmatic access configured on your machine.
+
+An easy option to deploy is `docker-machine`.
+
+You'll need to install it first. I recommend installing the bash completion and prompt as well. 
+https://docs.docker.com/machine/install-machine/
+
+Then 
+
+    docker-machine create --driver amazonec2 --amazonec2-open-port 80 aws-sandbox  
+    
+You can swap the driver for your favorite cloud provider.  
+Here docker-machine will provision an ubuntu ec2 instance for us and install docker on it.  
+
+Then we run:
+
+    eval $(docker-machine env aws-sandbox)
+    
+and from now on (in our current shell), all docker commands we run will **point to the ec2 instance**.  
+
+    # build still works as if you ran it locally, but the images are created on the remote instance.
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml build    
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+    
+    # Optional: Deactivate the docker-machine environment
+    eval $(docker-machine env -u)
+    
+    
+Useful commands:
+
+    docker-machine ip aws-sandbox
+    
+    docker-machine ssh aws-sandbox

@@ -1,31 +1,16 @@
 version: '3'
 services:
-    front:
-      image: docker-tutorial/front
-      build:
-        context: ./
-        dockerfile: front.dockerfile
-      command: npm run dev
-      volumes:
-        - ./client:/app
-      ports:
-        - "8080:8080"
     web:
       image: docker-tutorial/web
-      command: python manage.py runserver
       build:
         context: ./
-        dockerfile: web.dockerfile
-      ports:
-        - "5000:5000"
-      volumes:
-        - ./:/app
-      depends_on:
-        - db
+        dockerfile: deploy/web.dockerfile
+      environment:
+        - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@db:5432
+        # Making production the default.
+        - QUIZ_ENV=production
     db:
       image: postgres:10.2-alpine
       environment:
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=postgres
-      ports:
-          - "5432:5432"
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres

@@ -1,0 +1,25 @@
+# This file adds volumes for development use. docker-compose merges them in a 'smart' way.
+# We also add the test database. We don't need it in production.
+version: '3'
+services:
+    front:
+      image: docker-tutorial/front
+      build:
+        context: ./
+        dockerfile: deploy/front.dockerfile
+      command: npm run dev
+      volumes:
+        - ./client:/app
+      ports:
+        - "8080:8080"
+    web:
+      ports:
+        - "5000:5000"
+      command: python manage.py runserver
+      volumes:
+        - ./:/app
+      environment:
+        - QUIZ_ENV=development
+    db:
+      ports:
+          - "5432:5432"
