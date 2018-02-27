@@ -30,8 +30,10 @@ The code is probably not something you want to take as a reference.
 I believe that understanding some weird behaviors of your favorite language can make you improve as a programmer.   
 Which does not mean that good programmers know them nor that you have to know them to be a good programmer.
 
-[This](https://www.youtube.com/watch?v=sH4XF6pKKmk) is a nice talk that explains some Python WATs that I included in the quiz, and more.
+Some resources:
 
+* [This](https://www.youtube.com/watch?v=sH4XF6pKKmk) is a nice talk that explains some Python WATs that I included in the quiz, and more Python behaviors.
+* [This stackoverflow answer](https://stackoverflow.com/a/9033306/3914041) gives great explanations on the Javascript WATs in this quiz.
 
 ## Deploying
 

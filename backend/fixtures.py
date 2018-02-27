@@ -29,7 +29,7 @@ print(MyClass().get_string())
 ```
 """.strip(),
         'answer': answer_str,
-        'choices': [answer_str, 'NameError', 'What the ...?'],
+        'choices': [answer_str, 'NameError', 'Uh?'],
         'data': {
             'language': 'python',
             'is_wat': True
@@ -58,7 +58,7 @@ Javascript console. Level: easy.
 ```
         """.strip(),
         'answer': "0",
-        'choices': ["0", '[]', 'TypeError', '{}'],
+        'choices': ["0", '[]', '[object Object]', '{}'],
         'data': {
             'language': 'js',
             'comment': "This is a feature, not a bug.",
@@ -238,6 +238,8 @@ Python 3.6.0
         'data': {
             'language': 'python',
             'is_wat': True,
+            'comment': 'This is parsed as `False == False and False in [False]`.\n'
+                       'Surely makes more sense with `1 < 2 < 3`.'
         }
     }
     sample_js_5 = {

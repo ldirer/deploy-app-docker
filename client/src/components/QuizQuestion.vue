@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <img class="logo" v-if="logoSrc" v-bind:src="logoSrc">
+    <img class="logo" v-if="logoSrc" :src="logoSrc" :alt="question.data.language + ' logo'">
 
     <div class="content">
       <div class="qz-snippet is-centered" v-html="marked(question.text)">
