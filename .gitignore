@@ -2,6 +2,10 @@
 
 # Cuz my drafts may contain bad language.
 deploy_app_docker.md
+deploy_app_docker_v2.md
+
+.env
+
 
 __pycache__/
 
