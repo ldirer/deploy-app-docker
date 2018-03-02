@@ -5,11 +5,15 @@ services:
       build:
         context: ./
         dockerfile: deploy/nginx.dockerfile
-      ports:
-        - "80:80"
+        args:
+          # Relies on the env variable being set! Cant get compose to run a command.
+          # https://github.com/docker/compose/issues/4081
+          COMMIT_HASH: ${COMMIT_HASH}
       depends_on:
         - web  # not optional, nginx crashes if it does not find web. It checks hostname in the startup phase.
         # Fix this: https://sandro-keil.de/blog/2017/07/24/let-nginx-start-if-upstream-host-is-unavailable-or-down/
+      environment:
+        - VIRTUAL_HOST=quiz.wat.ldirer.com
       logging: &logging
         driver: "json-file"
         options:
@@ -30,3 +34,7 @@ services:
       restart: always
       volumes:
         - /quizdata:/var/lib/postgresql/data
+networks:
+  default:
+    external:
+      name: nginx-proxy
