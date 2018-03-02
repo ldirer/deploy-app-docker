@@ -84,7 +84,7 @@ Credits to that guy. I'm just a copy-paster.
     top: -10px;
     left: -10px;
     padding: 10px;
-    background: url(../assets/noise.png) repeat;
+    background: url(../assets/noise.png) repeat round;
   }
 
   .rubber_stamp {
@@ -122,7 +122,7 @@ Credits to that guy. I'm just a copy-paster.
     top: -10px;
     left: -10px;
     padding: 10px;
-    background: url(../assets/noise.png) repeat;
+    background: url(../assets/noise.png) repeat round;
   }
 
 </style>

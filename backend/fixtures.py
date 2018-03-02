@@ -58,7 +58,7 @@ Javascript console. Level: easy.
 ```
         """.strip(),
         'answer': "0",
-        'choices': ["0", '[]', '[object Object]', '{}'],
+        'choices': ["0", '[]', "'[object Object]'", '{}'],
         'data': {
             'language': 'js',
             'comment': "This is a feature, not a bug.",
