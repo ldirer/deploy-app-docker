@@ -6,14 +6,18 @@ services:
         context: ./
         dockerfile: deploy/nginx.dockerfile
         args:
-          # Relies on the env variable being set! Cant get compose to run a command.
+          # Relies on the env variables being set! Cant get compose to run a command.
           # https://github.com/docker/compose/issues/4081
           COMMIT_HASH: ${COMMIT_HASH}
+          SENTRY_DSN: ${SENTRY_DSN}
+          GOOGLE_ANALYTICS_TRACK_ID: ${GOOGLE_ANALYTICS_TRACK_ID}
       depends_on:
         - web  # not optional, nginx crashes if it does not find web. It checks hostname in the startup phase.
         # Fix this: https://sandro-keil.de/blog/2017/07/24/let-nginx-start-if-upstream-host-is-unavailable-or-down/
       environment:
         - VIRTUAL_HOST=quiz.wat.ldirer.com
+      env_file:
+        - .env
       logging: &logging
         driver: "json-file"
         options:

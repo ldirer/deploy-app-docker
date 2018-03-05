@@ -32,7 +32,18 @@ Raven
 import App from './App'
 
 import router from "./router";
+import VueAnalytics from 'vue-analytics'
 
+
+Vue.use(VueAnalytics, {
+  id: process.env.GOOGLE_ANALYTICS_TRACK_ID,
+  // We just give the router and the plugin handles page tracking for us
+  router,
+  debug: {
+    // disable in dev. https://github.com/MatteoGabriele/vue-analytics/blob/master/docs/turn-off-development.md
+    sendHitTask: process.env.NODE_ENV === 'production'
+  }
+})
 
 
 /* eslint-disable no-new */

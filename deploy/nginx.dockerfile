@@ -2,9 +2,17 @@
 # Using multi-stage docker build for a smaller final image.
 FROM node:9.5 AS jsbuilder
 
+ARG COMMIT_HASH=''
+ARG SENTRY_DSN
+ARG GOOGLE_ANALYTICS_TRACK_ID
+
 COPY ./client /client
 WORKDIR /client
 
+# This is so the build include the relevant commit hash in sentry releases.
+ENV COMMIT_HASH $COMMIT_HASH
+ENV SENTRY_DSN $SENTRY_DSN
+ENV GOOGLE_ANALYTICS_TRACK_ID $GOOGLE_ANALYTICS_TRACK_ID
 RUN npm install
 RUN npm run build
 
