@@ -2,13 +2,9 @@
 # Using multi-stage docker build for a smaller final image.
 FROM node:9.5 AS jsbuilder
 
-ARG COMMIT_HASH=''
-
 COPY ./client /client
 WORKDIR /client
 
-# This is so the build include the relevant commit hash in sentry releases.
-ENV COMMIT_HASH $COMMIT_HASH
 RUN npm install
 RUN npm run build
 
