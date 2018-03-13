@@ -198,7 +198,6 @@ function gameReducer(action) {
     store.loading[ACTION_GET_NEW_GAME] = false
     store.questions = response.questions.map(questionData => new Question(questionData))
     store.gameId = response.id
-    console.log('store', store)
   }
 
   if (action.type === ACTION_GET_NEW_GAME_FAILURE) {
@@ -260,7 +259,7 @@ function gameReducer(action) {
       store.loading[ACTION_FETCH_LATEST_SCORES] = true
       registerActionCallbacks(fetchLatestScores(), ACTION_FETCH_LATEST_SCORES_SUCCESS, ACTION_FETCH_LATEST_SCORES_FAILURE)
     } else {
-      console.log(`action ${ACTION_FETCH_LATEST_SCORES} already loading. Not making a new request.`)
+      // console.log(`action ${ACTION_FETCH_LATEST_SCORES} already loading. Not making a new request.`)
     }
   }
 
@@ -350,7 +349,6 @@ function utilsReducer(action) {
 
 /** redux-like interface */
 export function dispatch(action) {
-  console.log(`Received action ${action.type}`)
 
   // Would be nice to have some way to register reducers automagically.
   let reducers = [questionReducer, gameReducer, utilsReducer]

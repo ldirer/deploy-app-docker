@@ -9,9 +9,7 @@ RUN npm install
 RUN npm run build
 
 # Multi-stage means the build context needs to be the same, that's a bit disappointing (coupling!)...
-FROM alpine:latest
-
-RUN apk add --no-cache nginx
+FROM nginx:1.13.9-alpine
 
 # Note we use a more restricted context for this dockerfile (facebook/deploy/conf)
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
@@ -19,6 +17,5 @@ COPY deploy/nginx.conf /etc/nginx/nginx.conf
 COPY --from=jsbuilder /client/dist/ app/
 # Make sure sourcemaps are not served (but I still want to access them later on to upload them to sentry)
 RUN mkdir app-sourcemaps && mv app/static/js/*.js.map app-sourcemaps
-CMD nginx
 
 EXPOSE 8000 4430

@@ -1,4 +1,5 @@
-.circleci
+#.circleci
 client/node_modules
 .git/
 .idea/
+.dockerignore

@@ -72,7 +72,6 @@
 
       },
       goToScoreBoard() {
-        console.log('in gotoscoreboard')
         dispatch({ type: ACTION_GO_TO_LATEST_SCORES })
       },
       getMessageFromScore

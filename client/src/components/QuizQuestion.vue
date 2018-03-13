@@ -74,7 +74,6 @@
     methods: {
       marked,
       submitAnswer: function (userAnswer) {
-        console.log(`Answer ${userAnswer} submitted!`)
         dispatch({type: ACTION_SUBMIT_ANSWER, payload: {id: this.question.id, userAnswer}})
       },
       goToNextQuestion: function () {
