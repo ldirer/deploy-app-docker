@@ -36,7 +36,7 @@
             <img class="logo-footer" src="./assets/docker.png">
           </div>
           &nbsp
-          Built by <a href="https://ldirer.github.io">Laurent Direr</a>
+          Built by <a href="http://ldirer.com">Laurent Direr</a>
         </div>
     </footer>
   </div>

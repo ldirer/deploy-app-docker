@@ -1,6 +1,6 @@
 FROM python:3.6
 
-RUN mkdir /app
+# WORKDIR creates the directory if necessary.
 WORKDIR /app
 
 ADD ./requirements.txt ./

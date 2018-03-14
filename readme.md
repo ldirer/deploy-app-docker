@@ -4,6 +4,8 @@ A programming quiz with regular questions mixed with (much harder) questions on 
 
 This is a demo application to support [this blog post](https://ldirer.github.io/deploy-docker-app/).  
 
+[Take the quiz!](http://quiz.wat.ldirer.com)
+
 I wanted to build a real-world application to show how docker-compose works with a backend, frontend and database.  
 
 This app lets people answer a programming quiz:
@@ -11,7 +13,7 @@ This app lets people answer a programming quiz:
 * The frontend is written with Vuejs. 
 * The backend is in Flask (Python) and uses a PostgreSQL database.
 * We use the database to store the questions and the answers that were submitted if the user decides to record his score.  
-For an application this simple you could probably have used a cloud database like firebase. 
+For an application this simple you could probably have used a cloud database like firebase (or no database at all!). 
 
 Inspiration from:
 

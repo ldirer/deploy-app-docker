@@ -11,7 +11,6 @@ RUN npm run build
 # Multi-stage means the build context needs to be the same, that's a bit disappointing (coupling!)...
 FROM nginx:1.13.9-alpine
 
-# Note we use a more restricted context for this dockerfile (facebook/deploy/conf)
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=jsbuilder /client/dist/ app/
