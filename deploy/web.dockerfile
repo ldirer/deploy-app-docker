@@ -1,4 +1,9 @@
-FROM python:3.6
+FROM python:3.6-alpine3.7
+
+RUN apk add --update gcc postgresql-dev && \
+  apk add musl-dev && \
+  # Required by uWSGI
+  apk add linux-headers
 
 # WORKDIR creates the directory if necessary.
 WORKDIR /app
